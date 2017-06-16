@@ -2,9 +2,9 @@ Please follow the following instruction for using this protocol.
 This code is for Network Simulator 2.
 The repository has three files named as CHORD.cc, CHORD.h and ns-default.tcl.
 In order to use this protocol, certain changes are required in NS2.
-In folder nsallinone-2.35/ns-2.35/queue/, you have to replace the already existing red.cc and red.h files with these new files provided here.
+In folder nsallinone-2.35/ns-2.35/queue/, you have to replace the already existing red.cc and red.h files with CHORD.cc and CHORD.h provided here.
 In folder nsallinone-2.35/ns-2.35/tcl/lib/, you will need to replace the already existing ns-default.tcl file with the one provided here.
 The purpose of replacing the header and tcl files is that we have made some changes in these files required for our CHORD technique.
 After making the changes given above, complie your NS-2 by giving the make command from the command line. 
 After the susscessful compliation, the CHORD is ready to use.
-If the code does not execute, try renaming the files CHORD.cc to red.cc and CHORD.h to red.h” and then compile NS2. Your code must execute now.
+If the code does not execute, try renaming the files CHORD.cc to red.cc and CHORD.h to red.h and then compile NS2. Your code must execute now.
