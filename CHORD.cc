@@ -1,59 +1,4 @@
- /* -*-	Mode:C++; c-basic-offset:8; tab-width:8; indent-tabs-mode:t -*- */
-/*
- * Copyright (c) 1990-1997 Regents of the University of California.
- * All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
- * 3. All advertising materials mentioning features or use of this software
- *    must display the following acknowledgement:
- *	This product includes software developed by the Computer Systems
- *	Engineering Group at Lawrence Berkeley Laboratory.
- * 4. Neither the name of the University nor of the Laboratory may be used
- *    to endorse or promote products derived from this software without
- *    specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
- * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
- * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
- * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
- * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
- * SUCH DAMAGE.
- *
- *
- * Here is one set of parameters from one of Sally's simulations
- * (this is from tcpsim, the older simulator):
- * 
- * ed [ q_weight=0.002 thresh=5 linterm=30 maxthresh=15
- *         mean_pktsize=500 dropmech=random-drop queue-size=60
- *         plot-file=none bytes=false doubleq=false dqthresh=50 
- *	   wait=true ]
- * 
- * 1/"linterm" is the max probability of dropping a packet. 
- * There are different options that make the code
- * more messy that it would otherwise be.  For example,
- * "doubleq" and "dqthresh" are for a queue that gives priority to
- *   small (control) packets, 
- * "bytes" indicates whether the queue should be measured in bytes 
- *   or in packets, 
- * "dropmech" indicates whether the drop function should be random-drop 
- *   or drop-tail when/if the queue overflows, and 
- *   the commented-out Holt-Winters method for computing the average queue 
- *   size can be ignored.
- * "wait" indicates whether the gateway should wait between dropping
- *   packets.
- */
+
 
 #ifndef lint
 static const char rcsid[] =
@@ -185,27 +130,10 @@ REDQueue::REDQueue(const char * trace) : link_(NULL), de_drop_(NULL), EDTrace(NU
 
 
 
-/*
- * Note: if the link bandwidth changes in the course of the
- * simulation, the bandwidth-dependent RED parameters do not change.
- * This should be fixed, but it would require some extra parameters,
- * and didn't seem worth the trouble...
- */
+
 void REDQueue::initialize_params()
 {
-/*
- * If q_weight=0, set it to a reasonable value of 1-exp(-1/C)
- * This corresponds to choosing q_weight to be of that value for
- * which the packet time constant -1/ln(1-q_weight) per default RTT 
- * of 100ms is an order of magnitude more than the link capacity, C.
- *
- * If q_weight=-1, then the queue weight is set to be a function of
- * the bandwidth and the link propagation delay.  In particular, 
- * the default RTT is assumed to be three times the link delay and 
- * transmission delay, if this gives a default RTT greater than 100 ms. 
- *
- * If q_weight=-2, set it to a reasonable value of 1-exp(-10/C).
- */
+
 	if (edp_.q_w == 0.0) {
 		edp_.q_w = 1.0 - exp(-1.0/edp_.ptc);
  	} else if (edp_.q_w == -1.0) {
